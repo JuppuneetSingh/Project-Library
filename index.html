@@ -8,7 +8,33 @@
 </head>
 <body>
 
-    
+
+
+   
+
+
+    <button id="new-book">New Book</button>
+
+    <form id="book-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" placeholder="Title" required>
+        <label for="author">Author:</label>
+        <input type="text" id="author" placeholder="Author" required>
+        <label for="pages">Pages:</label>
+        <input type="number" id="pages" placeholder="Pages" min="1" required >
+
+        <label>
+            <input type="checkbox" id="read">
+            Read
+        </label>
+
+        <button type="submit">Add Book</button>
+    </form>
+
+     <div id="library">
+
+    </div>
+
 
     <script src="script.js" defer></script>
 </body>
