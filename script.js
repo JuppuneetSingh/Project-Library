@@ -1,3 +1,4 @@
+
 const myLibrary = [];
 
 function Book(title, author, pages, read) {
@@ -21,18 +22,62 @@ function addBookToLibrary(title, author, pages, read) {
 const library = document.querySelector("#library");
 const form = document.querySelector("#book-form");
 
+const titleInput = document.querySelector("#title");
+const authorInput = document.querySelector("#author");
+const pagesInput = document.querySelector("#pages");
+const readInput = document.querySelector("#read");
+
+// Clear custom error messages when the user edits a field
+[titleInput, authorInput, pagesInput].forEach((field) => {
+    field.addEventListener("input", () => {
+        field.setCustomValidity("");
+    });
+});
+
 // Form submission
 form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    // Get form values
-    const title = document.querySelector("#title").value;
-    const author = document.querySelector("#author").value;
-    const pages = document.querySelector("#pages").value;
-    const read = document.querySelector("#read").checked;
+    // Get and clean form values
+    const title = titleInput.value.trim();
+    const author = authorInput.value.trim();
+    const pages = pagesInput.value;
+    const read = readInput.checked;
+
+    // Clear any previous custom errors
+    [titleInput, authorInput, pagesInput].forEach((field) => {
+        field.setCustomValidity("");
+    });
+
+    // Validate title
+    if (title === "") {
+        titleInput.setCustomValidity(
+            "The book title must be filled!"
+        );
+        titleInput.reportValidity();
+        return;
+    }
+
+    // Validate author
+    if (author === "") {
+        authorInput.setCustomValidity(
+            "The author name must be filled!"
+        );
+        authorInput.reportValidity();
+        return;
+    }
+
+    // Validate pages
+    if (pages === "" || Number(pages) < 1) {
+        pagesInput.setCustomValidity(
+            "The number of pages must be at least 1!"
+        );
+        pagesInput.reportValidity();
+        return;
+    }
 
     // Add new book to array
-    addBookToLibrary(title, author, pages, read);
+    addBookToLibrary(title, author, Number(pages), read);
 
     // Refresh display
     displayBooks();
@@ -40,6 +85,7 @@ form.addEventListener("submit", function (event) {
     // Clear form
     form.reset();
 
+    // Hide form
     form.style.display = "none";
 });
 
@@ -77,13 +123,11 @@ function displayBooks() {
         removeButton.textContent = "Remove";
 
         removeButton.addEventListener("click", function () {
-
             const index = myLibrary.findIndex(
                 book => book.id === card.dataset.id
             );
 
             myLibrary.splice(index, 1);
-
             displayBooks();
         });
 
@@ -92,9 +136,7 @@ function displayBooks() {
         readButton.textContent = "Toggle Read";
 
         readButton.addEventListener("click", function () {
-
             book.toggleRead();
-
             displayBooks();
         });
 
@@ -111,30 +153,16 @@ function displayBooks() {
     });
 }
 
+// Show the form
 const newBookButton = document.querySelector("#new-book");
-newBookButton.addEventListener("click",function()
-{
+
+newBookButton.addEventListener("click", function () {
     form.style.display = "block";
 });
 
-
-
-
 // Temporary books for testing
-addBookToLibrary(
-    "The Hobbit",
-    "J.R.R. Tolkien",
-    295,
-    false
-);
-
-addBookToLibrary(
-    "1984",
-    "George Orwell",
-    328,
-    true
-);
+addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, false);
+addBookToLibrary("1984", "George Orwell", 328, true);
 
 // Initial display
 displayBooks();
-
